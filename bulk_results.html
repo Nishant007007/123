@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Date Extraction Results - Date Extractor</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-5">
+        <!-- Header -->
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
+                <div class="text-center mb-4">
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary mb-3">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Search
+                    </a>
+                    <h1 class="display-5 mb-3">
+                        <i class="fas fa-list-check text-success me-2"></i>
+                        Bulk Extraction Results
+                    </h1>
+                    <p class="lead text-muted">Results from processing multiple URLs</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Statistics -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-11">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fas fa-link fa-2x text-primary mb-2"></i>
+                                <h4 class="text-primary">{{ total_urls }}</h4>
+                                <p class="mb-0">URLs Processed</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fas fa-calendar-alt fa-2x text-success mb-2"></i>
+                                <h4 class="text-success">{{ total_dates }}</h4>
+                                <p class="mb-0">Total Dates Found</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fas fa-check-circle fa-2x text-info mb-2"></i>
+                                <h4 class="text-info">{{ results|selectattr('error', 'none')|list|length }}</h4>
+                                <p class="mb-0">Successful</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+                                <h4 class="text-warning">{{ results|selectattr('error', 'string')|list|length }}</h4>
+                                <p class="mb-0">Errors</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Options -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-11">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-download me-2"></i>
+                            Export All Results
+                        </h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-outline-primary" onclick="copyAllToClipboard()">
+                                <i class="fas fa-copy me-2"></i>Copy All to Clipboard
+                            </button>
+                            <button class="btn btn-outline-secondary" onclick="downloadAllAsText()">
+                                <i class="fas fa-file-text me-2"></i>Download as Text
+                            </button>
+                            <button class="btn btn-outline-success" onclick="downloadAsCSV()">
+                                <i class="fas fa-file-csv me-2"></i>Download as CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
+                {% for result in results %}
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="flex-grow-1">
+                                <h5 class="mb-0">
+                                    {% if result.error %}
+                                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                    {% else %}
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                    {% endif %}
+                                    <a href="{{ result.url }}" target="_blank" class="text-decoration-none">
+                                        {{ result.url }}
+                                    </a>
+                                    <i class="fas fa-external-link-alt ms-1 text-muted"></i>
+                                </h5>
+                            </div>
+                            <div class="ms-3">
+                                {% if result.error %}
+                                    <span class="badge bg-warning">Error</span>
+                                {% else %}
+                                    <span class="badge bg-success">{{ result.total_dates }} dates</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="card-body">
+                            {% if result.error %}
+                                <div class="alert alert-warning d-flex align-items-center">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <strong>Error:</strong>&nbsp;{{ result.error }}
+                                </div>
+                            {% else %}
+                                {% if result.total_dates > 0 %}
+                                    <div class="row">
+                                        {% if result.visible_dates %}
+                                            <div class="col-md-6 mb-3">
+                                                <h6 class="text-info">
+                                                    <i class="fas fa-eye me-2"></i>
+                                                    Visible Content ({{ result.visible_dates|length }})
+                                                </h6>
+                                                <div class="d-flex flex-wrap gap-1">
+                                                    {% for date in result.visible_dates %}
+                                                        <span class="badge bg-info bg-opacity-75">{{ date }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        {% if result.source_dates %}
+                                            <div class="col-md-6 mb-3">
+                                                <h6 class="text-success">
+                                                    <i class="fas fa-code me-2"></i>
+                                                    Source Code ({{ result.source_dates|length }})
+                                                </h6>
+                                                <div class="d-flex flex-wrap gap-1">
+                                                    {% for date in result.source_dates %}
+                                                        <span class="badge bg-success bg-opacity-75">{{ date }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div class="text-muted text-center py-3">
+                                        <i class="fas fa-calendar-times me-2"></i>
+                                        No dates found on this page
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-5 pt-4 border-top">
+            <p class="text-muted">
+                <i class="fas fa-info-circle me-1"></i>
+                Bulk processing completed. Results may vary by website structure.
+            </p>
+        </footer>
+    </div>
+
+    <!-- Hidden data for JavaScript -->
+    <script type="application/json" id="bulk-results-data">
+        {{ results | tojson }}
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='bulk_script.js') }}"></script>
+</body>
+</html>
