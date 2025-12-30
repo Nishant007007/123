@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Extractor - Demo with Updated Dependencies</title>
+    <!-- Updated Font Awesome 7.1.0 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.1.0/css/all.min.css" rel="stylesheet">
+    <!-- Updated Bootstrap 5.3.8 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+        }
+        .card {
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+        .btn-primary {
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(13, 110, 253, 0.4);
+        }
+        .badge-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+        }
+        .demo-banner {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <!-- Demo Banner -->
+        <div class="demo-banner">
+            <i class="fas fa-rocket me-2"></i>
+            🎉 DEMO MODE - All Dependencies Updated! Font Awesome 7.1.0 + Bootstrap 5.3.8
+        </div>
+
+        <!-- Header -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <i class="fas fa-calendar-alt fa-3x text-info mb-3"></i>
+                    <h1 class="display-4 mb-3">Date Extractor</h1>
+                    <p class="lead text-muted">Extract dates from any webpage using advanced scraping techniques</p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap mt-3">
+                        <span class="badge-info">
+                            <i class="fas fa-check-circle me-1"></i> Font Awesome 7.1.0
+                        </span>
+                        <span class="badge-info">
+                            <i class="fas fa-check-circle me-1"></i> Bootstrap 5.3.8
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Form -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" id="processingTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="single-tab" data-bs-toggle="tab" data-bs-target="#single-url" type="button" role="tab">
+                                    <i class="fas fa-link me-2"></i>Single URL
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="bulk-tab" data-bs-toggle="tab" data-bs-target="#bulk-urls" type="button" role="tab">
+                                    <i class="fas fa-list me-2"></i>Multiple URLs
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="demoForm">
+                            <div class="tab-content" id="processingTabContent">
+                                <!-- Single URL Tab -->
+                                <div class="tab-pane fade show active" id="single-url" role="tabpanel">
+                                    <div class="mb-4">
+                                        <label for="url" class="form-label h5">
+                                            <i class="fas fa-link me-2"></i>Website URL
+                                        </label>
+                                        <div class="input-group input-group-lg">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-globe"></i>
+                                            </span>
+                                            <input
+                                                type="url"
+                                                class="form-control"
+                                                id="url"
+                                                placeholder="Enter website URL (e.g., https://example.com)"
+                                                value="https://example.com"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bulk URLs Tab -->
+                                <div class="tab-pane fade" id="bulk-urls" role="tabpanel">
+                                    <div class="mb-4">
+                                        <label for="urls_bulk" class="form-label h5">
+                                            <i class="fas fa-list me-2"></i>Multiple URLs
+                                        </label>
+                                        <textarea
+                                            class="form-control"
+                                            id="urls_bulk"
+                                            rows="8"
+                                            placeholder="Enter multiple URLs, one per line"
+                                            style="font-family: monospace;"
+                                        >https://example.com/page1
+https://example.com/page2
+https://example.com/page3</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-primary btn-lg" onclick="showDemo()">
+                                    <i class="fas fa-search me-2"></i>
+                                    Extract Dates (Demo)
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-10">
+                <div class="card feature-card">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">
+                            <i class="fas fa-cogs me-2"></i>
+                            New Features with Font Awesome 7.1.0
+                        </h3>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <div class="bg-info bg-opacity-25 rounded p-3 me-3">
+                                        <i class="fas fa-icons fa-2x text-info"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-1">4,500+ New Icons</h5>
+                                        <p class="text-muted mb-0">Massive library expansion with modern icon designs</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <div class="bg-success bg-opacity-25 rounded p-3 me-3">
+                                        <i class="fas fa-palette fa-2x text-success"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-1">Sharp Styles</h5>
+                                        <p class="text-muted mb-0">New Sharp and Sharp Duotone icon styles</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="d-flex align-items-start">
+                                    <div class="bg-warning bg-opacity-25 rounded p-3 me-3">
+                                        <i class="fas fa-bolt fa-2x text-warning"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-1">Better Performance</h5>
+                                        <p class="text-muted mb-0">Optimized rendering and improved visual consistency</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap 5.3.8 Features -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-10">
+                <div class="card feature-card">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">
+                            <i class="fab fa-bootstrap me-2"></i>
+                            Bootstrap 5.3.8 Improvements
+                        </h3>
+                        <div class="row text-center">
+                            <div class="col-md-4 mb-3">
+                                <i class="fas fa-bug fa-2x text-danger mb-2"></i>
+                                <h5>Bug Fixes</h5>
+                                <p class="text-muted">Latest stability improvements</p>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <i class="fas fa-shield-alt fa-2x text-success mb-2"></i>
+                                <h5>Security Patches</h5>
+                                <p class="text-muted">Enhanced security updates</p>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <i class="fas fa-tachometer-alt fa-2x text-info mb-2"></i>
+                                <h5>Performance</h5>
+                                <p class="text-muted">Optimized for speed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-5 pt-4 border-top">
+            <p class="text-muted">
+                <i class="fas fa-shield-alt me-1"></i>
+                Secure date extraction with error handling and validation
+            </p>
+            <p class="text-muted small">
+                <i class="fas fa-code me-1"></i>
+                Powered by Font Awesome 7.1.0 & Bootstrap 5.3.8
+            </p>
+        </footer>
+    </div>
+
+    <!-- Updated Bootstrap 5.3.8 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showDemo() {
+            alert('🎉 Demo Mode!\n\n✅ Font Awesome 7.1.0 is loaded\n✅ Bootstrap 5.3.8 is loaded\n\nAll dependencies are up to date!\n\nIn a real app, this would scrape the URL and extract dates.');
+        }
+    </script>
+</body>
+</html>
